@@ -1,7 +1,7 @@
 # LAB7_SM - Analyse Dynamique d'Applications Android avec MobSF
 
 ## 📱 Vue d'ensemble
-Ce laboratoire document les résultats d'une analyse dynamique complète de l'application DIVA (Damn Insecure and Vulnerable App) réalisée à l'aide de **MobSF (Mobile Security Framework)** sur un émulateur Android.
+Ce laboratoire documente les résultats d'une analyse dynamique complète de l'application DIVA (Damn Insecure and Vulnerable App) réalisée à l'aide de **MobSF (Mobile Security Framework)**.
 
 ---
 
@@ -15,12 +15,20 @@ Ce laboratoire document les résultats d'une analyse dynamique complète de l'ap
 - ✅ ADB connecté et reconnu
 
 ### 2. Injection de Code Frida
-J'ai pu écrire et injecter mon propre code Frida directement :
+
+#### 🧠 Éditeur Frida personnalisé
+L'éditeur intégré permet d'injecter du code Frida sur mesure :
 
 ```javascript
 Java.perform(function() {
     console.log("[*] Hooking DIVA...");
-    // Hooks personnalisés pour l'analyse des fonctions Java
+    
+    // Exemple : hook d'une méthode spécifique
+    var targetClass = Java.use("jakhar.aseem.diva.MainActivity");
+    targetClass.onCreate.implementation = function(savedInstanceState) {
+        console.log("[+] onCreate called !");
+        return this.onCreate(savedInstanceState);
+    };
 });
 ```
 
@@ -28,63 +36,85 @@ Java.perform(function() {
 
 ## 🧭 Menu principal du Dynamic Analyzer
 
-| Fonction | Utilité |
-|----------|---------|
-| **Show Screen** | Mirroring de l'émulateur en temps réel |
-| **Remove Root CA** | Supprimer le certificat racine MobSF |
-| **Unset HTTP(S) Proxy** | Désactiver l'interception réseau |
-| **TLS/SSL Security Tester** | Tester la validation des certificats |
-| **Exported Activity Tester** | Tester les activités exposées |
-| **Activity Tester** | Lancer des activités internes |
-| **Get Dependencies** | Identifier les bibliothèques utilisées |
-| **Take a Screenshot** | Capturer l'écran pour documentation |
-| **Logcat Stream** | Logs Android en temps réel |
-| **Generate Report** | Exporter les résultats en PDF/JSON |
+| Fonction | Description technique | Utilité en analyse |
+|----------|----------------------|-------------------|
+| **Show Screen** | Mirroring VNC de l'écran | Observation en temps réel |
+| **Remove Root CA** | Suppression du certificat racine MobSF | Nettoyage post-analyse |
+| **Unset HTTP(S) Proxy** | Désactivation du proxy système | Retour à un réseau normal |
+| **TLS/SSL Security Tester** | Tests de validation certifiants | Détection faiblesses SSL/TLS |
+| **Exported Activity Tester** | Test des activités exportées | Vérification des vecteurs d'attaque |
+| **Activity Tester** | Lancement forcé d'activités | Exploration des écrans internes |
+| **Get Dependencies** | Extraction des bibliothèques | Identification des composants tiers |
+| **Take a Screenshot** | Capture d'écran distante | Documentation des preuves |
+| **Logcat Stream** | Streaming des logs Android | Détection de fuites d'informations |
+| **Generate Report** | Export JSON/PDF | Synthèse des vulnérabilités |
 
 ---
 
-## 🧪 Tests dynamiques réalisés avec DIVA
+## 🧪 Résultats des tests dynamiques sur DIVA
 
-| Challenge DIVA | Ce que j'ai observé dans MobSF |
-|----------------|--------------------------------|
-| **Insecure Logging** | Logcat affiche des informations sensibles en clair |
-| **Hardcoding Issues** | Détection de credentials dans le code |
-| **Insecure Data Storage** | Fichiers écrits en clair sur le stockage local |
-| **Access Control** | Intents non sécurisés détectés |
-
----
-
-## 🐛 Dépannage (au cas où)
-
-| Problème | Solution que j'ai appliquée |
-|----------|------------------------------|
-| **Dynamic Analysis Failed** | Vérifier que l'émulateur est lancé avant MobSF |
-| **adb devices ne montre rien** | Redémarrer ADB : `adb kill-server && adb start-server` |
-| **Proxy HTTPS ne fonctionne pas** | Vérifier l'option `--net=host` sous Linux |
-| **Émulateur trop lent** | Utiliser API 29 x86_64 sans Google Play |
+| Challenge DIVA | Observation dans MobSF | Niveau de criticité |
+|----------------|------------------------|--------------------|
+| **Insecure Logging** | Données sensibles (credentials, tokens) affichées en clair dans Logcat | ⚠️ Élevé |
+| **Hardcoding Issues** | Mots de passe et clés API visibles dans le code décompilé | 🔴 Critique |
+| **Insecure Data Storage** | Fichiers de préférences et bases de données non chiffrées sur /data/data | ⚠️ Élevé |
+| **Access Control** | Intents non validés permettant l'accès à des activités protégées | 🟡 Moyen |
+| **Input Validation** | Absence de validation des entrées utilisateur | 🟡 Moyen |
+| **Content Provider Leakage** | Provider exporté exposant des données sensibles | 🔴 Critique |
 
 ---
 
-## 🎓 Conclusion
+## 🛠️ Environnement technique
 
-Félicitations à moi, **Soukaina Bachir** ! 🎉
-
-J'ai réalisé une analyse dynamique complète conforme aux standards **OWASP MASTG** et **Google Android Security**.
-
-J'ai maintenant la capacité de reproduire ce laboratoire avec d'autres APK vulnérables en suivant la même méthodologie.
-
-### Compétences acquises :
-- ✅ Configuration d'un environnement d'analyse dynamique
-- ✅ Utilisation avancée de MobSF
-- ✅ Injection de code Frida pour le hooking
-- ✅ Interception et analyse du trafic réseau
-- ✅ Documentation des vulnérabilités découvertes
-- ✅ Génération de rapports de sécurité
+| Composant | Version / Configuration |
+|-----------|------------------------|
+| **Système d'exploitation** | Linux / Windows / macOS |
+| **Android Emulator** | API 29 (Android 10), x86_64, sans Google Play |
+| **MobSF** | Version latest (Docker) |
+| **Frida Server** | Version adaptée à l'API 29 |
+| **ADB** | Platform-tools latest |
+| **APK testée** | DIVA (Damn Insecure and Vulnerable App) v1.0 |
 
 ---
 
-## 📚 Références
-- [OWASP MASTG - Dynamic Analysis](https://mas.owasp.org/techniques/android/MASTG-TECH-0033/)
-- [MobSF Documentation](https://mobsf.github.io/docs/)
-- [Frida Documentation](https://frida.re/)
-- [Android Security & Privacy Year in Review](https://security.googleblog.com/)
+## 🐛 Dépannage – Problèmes rencontrés et solutions
+
+| Problème | Cause probable | Solution appliquée |
+|----------|---------------|--------------------|
+| **Dynamic Analysis Failed** | Émulateur démarré après MobSF | Redémarrer l'analyse après vérification de `adb devices` |
+| **adb devices ne montre rien** | Service ADB non initialisé | `adb kill-server && adb start-server` |
+| **Proxy HTTPS inactif** | Problème réseau sous Linux | Ajouter `--net=host` à la commande Docker |
+| **Émulateur lent** | API trop récente ou image avec Google Play | Utiliser API 29 x86_64 sans Google Play |
+| **Frida ne répond pas** | Version Frida Server incompatible | Télécharger la version correspondant à l'architecture de l'émulateur |
+
+---
+
+## 🎓 Compétences acquises
+
+| Domaine | Compétences |
+|---------|------------|
+| **Environnement** | Configuration d'un AVD rooté sans services Google |
+| **Framework** | Maîtrise de MobSF (statique + dynamique) |
+| **Instrumentation** | Injection de code Frida, hooking de méthodes Java |
+| **Réseau** | Interception et analyse du trafic HTTPS |
+| **Analyse** | Détection de vulnérabilités : logging insecure, stockage, intents, hardcoding |
+| **Reporting** | Génération de rapports PDF/JSON exploitables |
+
+---
+
+## 📚 Références et ressources
+
+| Ressource | Lien |
+|-----------|------|
+| **OWASP MASTG - Dynamic Analysis** | [mas.owasp.org](https://mas.owasp.org) |
+| **MobSF Official Documentation** | [mobsf.github.io](https://mobsf.github.io) |
+| **Frida JavaScript API** | [frida.re/docs/javascript-api/](https://frida.re/docs/javascript-api/) |
+| **DIVA Android (Payatu)** | [github.com/payatu/diva-android](https://github.com/payatu/diva-android) |
+| **Android Security Bulletin** | [source.android.com/security](https://source.android.com/security) |
+
+---
+
+## 👤 Auteur
+
+**Soukaina Bachir**  
+Étudiante en Sécurité des applications mobiles – MLIAEdu
