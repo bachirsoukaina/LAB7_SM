@@ -5,7 +5,50 @@ Ce laboratoire documente les résultats d'une analyse dynamique complète de l'a
 
 ---
 
-## 🔍 Étapes d'analyse réalisées
+## 🔍 Procédure complète (rappel)
+
+### 1. Créer l'AVD (sans Play Store)
+- **Android Studio** → AVD Manager
+- **API 29 ou 30** (x86_64)
+- **Nom** : MobSF_DIVA_API_30
+
+### 2. Cloner MobSF
+```bash
+git clone https://github.com/MobSF/Mobile-Security-Framework-MobSF.git
+cd Mobile-Security-Framework-MobSF
+```
+
+### 3. Lancer l'émulateur (script MobSF)
+```bash
+./scripts/start_avd.sh MobSF_DIVA_API_30
+```
+
+### 4. Lancer MobSF via Docker
+```bash
+docker pull opensecurity/mobile-security-framework-mobsf:latest
+
+docker run -it --rm \
+  -p 8000:8000 \
+  -e MOBSF_ANALYZER_IDENTIFIER=emulator-5554 \
+  opensecurity/mobile-security-framework-mobsf:latest
+```
+
+**Accès web** : http://127.0.0.1:8000
+**Identifiants** : mobsf / mobsf
+
+### 5. Télécharger DIVA
+- **Source** : payatu/diva-android
+- **APK direct** : diva-beta.apk
+
+### 6. Analyser
+1. Upload APK → Analyse statique
+2. Bouton **Start Dynamic Analysis**
+3. Explorer les 13 challenges dans l'émulateur
+4. Observer logs + trafic + Frida
+
+---
+
+## ✅ Étapes d'analyse réalisées
 
 ### 1. Installation et Configuration
 - ✅ Émulateur Android lancé (API 29, x86_64)
@@ -77,15 +120,17 @@ Java.perform(function() {
 
 ---
 
-## 🐛 Dépannage – Problèmes rencontrés et solutions
+## 🐛 Dépannage rapide
 
-| Problème | Cause probable | Solution appliquée |
-|----------|---------------|--------------------|
-| **Dynamic Analysis Failed** | Émulateur démarré après MobSF | Redémarrer l'analyse après vérification de `adb devices` |
-| **adb devices ne montre rien** | Service ADB non initialisé | `adb kill-server && adb start-server` |
-| **Proxy HTTPS inactif** | Problème réseau sous Linux | Ajouter `--net=host` à la commande Docker |
-| **Émulateur lent** | API trop récente ou image avec Google Play | Utiliser API 29 x86_64 sans Google Play |
-| **Frida ne répond pas** | Version Frida Server incompatible | Télécharger la version correspondant à l'architecture de l'émulateur |
+| Problème | Solution |
+|----------|----------|
+| **Dynamic Analysis Failed** | Lancer émulateur avant MobSF + vérifier `adb devices` |
+| **Docker ne voit pas l'émulateur** | Ajouter `--net=host` (Linux) |
+| **Émulateur lent** | Utiliser API 29 x86_64 |
+| **Windows** | Utiliser `start_avd.ps1` |
+| **adb devices ne montre rien** | `adb kill-server && adb start-server` |
+| **Proxy HTTPS inactif** | Problème réseau sous Linux → Ajouter `--net=host` à Docker |
+| **Frida ne répond pas** | Télécharger version Frida Server correspondant à l'architecture de l'émulateur |
 
 ---
 
@@ -102,19 +147,18 @@ Java.perform(function() {
 
 ---
 
-## 📚 Références et ressources
+## 📚 Ressources officielles
 
 | Ressource | Lien |
 |-----------|------|
-| **OWASP MASTG - Dynamic Analysis** | [mas.owasp.org](https://mas.owasp.org) |
-| **MobSF Official Documentation** | [mobsf.github.io](https://mobsf.github.io) |
+| **MobSF Docs** | [mobsf.github.io](https://mobsf.github.io) |
+| **DIVA Android** | [github.com/payatu/diva-android](https://github.com/payatu/diva-android) |
+| **OWASP MASTG** | [mas.owasp.org](https://mas.owasp.org) |
 | **Frida JavaScript API** | [frida.re/docs/javascript-api/](https://frida.re/docs/javascript-api/) |
-| **DIVA Android (Payatu)** | [github.com/payatu/diva-android](https://github.com/payatu/diva-android) |
 | **Android Security Bulletin** | [source.android.com/security](https://source.android.com/security) |
 
 ---
 
 ## 👤 Auteur
 
-**Soukaina Bachir**  
-Étudiante en Sécurité des applications mobiles – MLIAEdu
+**Soukaina Bachir** – Mobile Security Lab – MLIAEdu 2026
