@@ -33,7 +33,7 @@ docker run -it --rm \
   opensecurity/mobile-security-framework-mobsf:latest
 ```
 
-**Accès web** : http://127.0.0.1:8000
+**Accès web** : http://127.0.0.1:8000  
 **Identifiants** : mobsf / mobsf
 
 ### 5. Télécharger DIVA
@@ -60,7 +60,10 @@ docker run -it --rm \
 ### 2. Injection de Code Frida
 
 #### 🧠 Éditeur Frida personnalisé
+
 L'éditeur intégré permet d'injecter du code Frida sur mesure :
+
+![Éditeur Frida MobSF](https://github.com/user-attachments/assets/9b8d3fab-b9ea-4d77-87a9-d1a383b507c6)
 
 ```javascript
 Java.perform(function() {
@@ -80,7 +83,7 @@ Java.perform(function() {
 ## 🧭 Menu principal du Dynamic Analyzer
 
 | Fonction | Description technique | Utilité en analyse |
-|----------|----------------------|-------------------|
+|----------|------------------------|--------------------|
 | **Show Screen** | Mirroring VNC de l'écran | Observation en temps réel |
 | **Remove Root CA** | Suppression du certificat racine MobSF | Nettoyage post-analyse |
 | **Unset HTTP(S) Proxy** | Désactivation du proxy système | Retour à un réseau normal |
@@ -96,8 +99,10 @@ Java.perform(function() {
 
 ## 🧪 Résultats des tests dynamiques sur DIVA
 
+![Résultats des tests DIVA](https://github.com/user-attachments/assets/c4d9166e-7751-407f-88e1-0124d29d217d)
+
 | Challenge DIVA | Observation dans MobSF | Niveau de criticité |
-|----------------|------------------------|--------------------|
+|---|---|---|
 | **Insecure Logging** | Données sensibles (credentials, tokens) affichées en clair dans Logcat | ⚠️ Élevé |
 | **Hardcoding Issues** | Mots de passe et clés API visibles dans le code décompilé | 🔴 Critique |
 | **Insecure Data Storage** | Fichiers de préférences et bases de données non chiffrées sur /data/data | ⚠️ Élevé |
@@ -110,7 +115,7 @@ Java.perform(function() {
 ## 🛠️ Environnement technique
 
 | Composant | Version / Configuration |
-|-----------|------------------------|
+|---|---|
 | **Système d'exploitation** | Linux / Windows / macOS |
 | **Android Emulator** | API 29 (Android 10), x86_64, sans Google Play |
 | **MobSF** | Version latest (Docker) |
@@ -123,7 +128,7 @@ Java.perform(function() {
 ## 🐛 Dépannage rapide
 
 | Problème | Solution |
-|----------|----------|
+|---|---|
 | **Dynamic Analysis Failed** | Lancer émulateur avant MobSF + vérifier `adb devices` |
 | **Docker ne voit pas l'émulateur** | Ajouter `--net=host` (Linux) |
 | **Émulateur lent** | Utiliser API 29 x86_64 |
@@ -137,7 +142,7 @@ Java.perform(function() {
 ## 🎓 Compétences acquises
 
 | Domaine | Compétences |
-|---------|------------|
+|---|---|
 | **Environnement** | Configuration d'un AVD rooté sans services Google |
 | **Framework** | Maîtrise de MobSF (statique + dynamique) |
 | **Instrumentation** | Injection de code Frida, hooking de méthodes Java |
@@ -150,7 +155,7 @@ Java.perform(function() {
 ## 📚 Ressources officielles
 
 | Ressource | Lien |
-|-----------|------|
+|---|---|
 | **MobSF Docs** | [mobsf.github.io](https://mobsf.github.io) |
 | **DIVA Android** | [github.com/payatu/diva-android](https://github.com/payatu/diva-android) |
 | **OWASP MASTG** | [mas.owasp.org](https://mas.owasp.org) |
