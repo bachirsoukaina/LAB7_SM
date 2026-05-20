@@ -3,6 +3,9 @@
 ## 📱 Vue d'ensemble
 Ce laboratoire documente les résultats d'une analyse dynamique complète de l'application DIVA (Damn Insecure and Vulnerable App) réalisée à l'aide de **MobSF (Mobile Security Framework)**.
 
+
+<img width="671" height="302" alt="originl" src="https://github.com/user-attachments/assets/82f6a8f6-000f-4cec-8a5b-c1587c829d6b" />
+
 ---
 
 ## 🔍 Procédure complète (rappel)
